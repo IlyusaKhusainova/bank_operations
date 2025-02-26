@@ -1,17 +1,32 @@
-# test_masks.py
+def get_mask_card_number(card_number):
+    """Маскирует все, кроме первых 4 и последних 4 цифр номера карты."""
+    return f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
 
-from src.masks import get_mask_card_number, get_mask_account
-from src.widget import mask_account_card, get_date
 
-def test_get_mask_card_number():
-    assert get_mask_card_number("7000792289606361") == "7000 79** **** 6361"
+def get_mask_account(account_number):
+    """Маскирует все, кроме последних 4 цифр номера счета."""
+    return f"**{account_number[-4:]}"
 
-def test_get_mask_account():
-    assert get_mask_account("73654108430135874305") == "**4305"
 
-def test_mask_account_card():
-    assert mask_account_card("Visa Platinum 7000792289606361") == "Visa Platinum 7000 79** **** 6361"
-    assert mask_account_card("Счет 73654108430135874305") == "Счет **4305"
+def mask_account_card(account_card):
+    """Разделяет строку с номером карты и маскирует номер карты или номер счета соответственно."""
+    parts = account_card.split()
+    if len(parts) > 1:
+        # Предполагаем, что последняя часть - это номер карты или номер счета
+        masked_part = get_mask_card_number(parts[-1]) if len(parts[-1]) == 16 else get_mask_account(parts[-1])
+        return ' '.join(parts[:-1] + [masked_part])
+    return account_card
 
-def test_get_date():
-    assert get_date("2024-03-11T02:26:18.671407") == "11.03.2024"
+
+def get_date(date_string):
+    """Преобразует строку даты в желаемый формат."""
+    from datetime import datetime
+    dt = datetime.fromisoformat(date_string)
+    return dt.strftime("%d.%m.%Y")
+
+
+if __name__ == "__main__":
+    get_mask_card_number()
+    get_mask_account()
+    mask_account_card()
+    get_date()

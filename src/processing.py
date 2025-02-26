@@ -12,9 +12,6 @@ def filter_by_state(transactions: List[Dict], state: str = 'EXECUTED') -> List[D
     return [transaction for transaction in transactions if transaction.get('state') == state]
 
 
-from typing import List, Dict
-
-
 def sort_by_date(transactions: List[Dict], descending: bool = True) -> List[Dict]:
     """
     Сортирует транзакции по дате.
@@ -24,6 +21,7 @@ def sort_by_date(transactions: List[Dict], descending: bool = True) -> List[Dict
     :return: Отсортированный список транзакций.
     """
     return sorted(transactions, key=lambda x: x['date'], reverse=descending)
+
 
 if __name__ == "__main__":
     sample_data = [
