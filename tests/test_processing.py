@@ -1,6 +1,7 @@
 import pytest
 from src.processing import filter_by_state, sort_by_date
 
+
 @pytest.fixture
 def sample_data():
     return [
@@ -8,6 +9,7 @@ def sample_data():
         {"id": 2, "state": "CANCELED", "date": "2021-07-01T02:26:18"},
         {"id": 3, "state": "EXECUTED", "date": "2021-06-02T02:26:18"},
     ]
+
 
 def test_filter_by_state(sample_data):
     assert filter_by_state(sample_data) == [
@@ -19,11 +21,13 @@ def test_filter_by_state(sample_data):
     ]
     assert filter_by_state(sample_data, "NON_EXISTENT") == []
 
+
 def test_filter_by_state_invalid():
     with pytest.raises(TypeError):
         filter_by_state(None)  # Проверка на None
     with pytest.raises(TypeError):
         filter_by_state("not a list")  # Проверка на некорректный тип
+
 
 @pytest.mark.parametrize(
     "data,expected",

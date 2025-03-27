@@ -1,6 +1,7 @@
 import pytest
 from src.masks import get_mask_card_number, get_mask_account
 
+
 # Тестирование функции get_mask_card_number
 @pytest.mark.parametrize(
     "card_number,expected",
@@ -14,6 +15,7 @@ from src.masks import get_mask_card_number, get_mask_account
 def test_get_mask_card_number(card_number, expected):
     result = get_mask_card_number(card_number)
     assert result == expected, f"Expected {expected}, but got {result} for input '{card_number}'"
+
 
 # Тестирование функции get_mask_account
 @pytest.mark.parametrize(
@@ -34,6 +36,7 @@ def test_get_mask_account(account_number, expected):
         result = get_mask_account(account_number)
         assert result == expected, f"Expected {expected}, but got {result} for input '{account_number}'"
 
+
 # Тестирование некорректных номеров карт
 @pytest.mark.parametrize(
     "invalid_card_number",
@@ -46,6 +49,7 @@ def test_get_mask_account(account_number, expected):
 def test_get_mask_card_number_invalid(invalid_card_number):
     with pytest.raises(ValueError):
         get_mask_card_number(invalid_card_number)
+
 
 # Тестирование некорректных номеров счетов
 @pytest.mark.parametrize(

@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+
 def filter_by_state(transactions: List[Dict], state: str = "EXECUTED") -> List[Dict]:
     """
     Фильтрует транзакции по состоянию.
