@@ -16,16 +16,18 @@ def get_mask_account(account_number):
 def mask_account_card(account_card):
     """Разделяет строку с номером карты и маскирует номер карты или номер счета соответственно."""
     parts = account_card.split()
-    if len(parts) > 1:
-        if len(parts[-1]) == 16:
-            masked_part = get_mask_card_number(parts[-1])
-        elif len(parts[-1]) >= 4:
-            masked_part = get_mask_account(parts[-1])
-        else:
-            raise ValueError("Некорректный номер карты или счета.")
+    if len(parts) < 2:
+        raise ValueError("Необходимо указать имя и номер карты или счета.")
 
-        return ' '.join(parts[:-1] + [masked_part])
-    raise ValueError("Необходимо указать имя и номер карты или счета.")
+    last_part = parts[-1]
+    if len(last_part) == 16 and last_part.isdigit():
+        masked_part = get_mask_card_number(last_part)
+    elif len(last_part) >= 4 and last_part.isdigit():
+        masked_part = get_mask_account(last_part)
+    else:
+        raise ValueError("Некорректный номер карты или счета.")
+
+    return ' '.join(parts[:-1] + [masked_part])
 
 
 def get_date(date_string):
@@ -43,5 +45,5 @@ def get_date(date_string):
 if __name__ == "__main__":
     print(get_mask_card_number("1234567812345678"))  # 1234 ** **** 5678
     print(get_mask_account("1234567890123456"))  # ********3456
-    print(mask_account_card("User Name 1234567812345678"))  # User Name 1234 ** **** 5678
+    print(mask_account_card("User  Name 1234567812345678"))  # User Name 1234 ** **** 5678
     print(get_date("2023-10-10"))  # 10.10.2023
