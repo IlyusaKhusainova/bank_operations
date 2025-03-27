@@ -1,6 +1,5 @@
 from typing import List, Dict
 
-
 def filter_by_state(transactions: List[Dict], state: str = "EXECUTED") -> List[Dict]:
     """
     Фильтрует транзакции по состоянию.
@@ -19,10 +18,14 @@ def filter_by_state(transactions: List[Dict], state: str = "EXECUTED") -> List[D
 
 
 def sort_by_date(transactions: List[Dict], descending: bool = True) -> List[Dict]:
-    print(f"Sorting transactions: {transactions}")  # Отладочное сообщение
+    """
+    Сортирует транзакции по дате.
+
+    :param transactions: Список словарей с транзакциями.
+    :param descending: Указывает, по убыванию ли сортировать.
+    :return: Отсортированный список транзакций.
+    """
     if not isinstance(transactions, list):
         raise TypeError("Входные данные должны быть списком транзакций.")
 
-    sorted_transactions = sorted(transactions, key=lambda x: x["date"], reverse=descending)
-    print(f"Sorted transactions: {sorted_transactions}")  # Отладочное сообщение
-    return sorted_transactions
+    return sorted(transactions, key=lambda x: x["date"], reverse=descending)
