@@ -1,12 +1,10 @@
-# src/widget.py
-
 from datetime import datetime
 
 from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(input_string: str) -> str:
-    """Замаскировка номера карты или счета на основе входящего типа."""
+    """Маскировка номера карты или счета на основе входящего типа."""
     parts = input_string.split()
     account_type = parts[0]
     account_number = parts[-1]
