@@ -33,3 +33,19 @@ line_length = 119
 disallow_untyped_defs = true
 warn_return_any = true
 exclude = 'venv'
+
+[tool.poetry]
+name = "my-bank-example"
+version = "0.1.0"
+description = "Описание вашего проекта"  # Убедитесь, что это строка
+authors = ["Ваше Имя <ваш.email@example.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.13"
+
+[tool.poetry.packages]
+# Указываем массив пакетов
+include = [
+    { include = "my_bank_example" }  # Укажите имя вашего пакета
+]
