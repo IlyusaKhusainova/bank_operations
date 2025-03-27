@@ -21,9 +21,9 @@ def test_filter_by_state(sample_data):
 
 def test_filter_by_state_invalid():
     with pytest.raises(TypeError):
-        filter_by_state([])  # Проверка на None
+        filter_by_state(None)  # Проверка на None
     with pytest.raises(TypeError):
-        filter_by_state([])  # Проверка на пустой список
+        filter_by_state("not a list")  # Проверка на некорректный тип
 
 @pytest.mark.parametrize(
     "data,expected",
@@ -39,5 +39,5 @@ def test_filter_by_state_invalid():
     ],
 )
 def test_sort_by_date(data, expected):
-    sorted_data = sort_by_date(data)
+    sorted_data = sort_by_date(data, descending=False)  # Сортируем по возрастанию
     assert sorted_data == expected, f"Ожидалось {expected}, но получено {sorted_data} для входных данных {data}"
