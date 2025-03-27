@@ -8,7 +8,7 @@ def get_mask_card_number(card_number):
 def get_mask_account(account_number):
     """Маскирует все, кроме последних 4 цифр номера счета."""
     if account_number.isdigit() and len(account_number) >= 4:
-        masked_part = '*' * (len(account_number) - 4)
+        masked_part = "*" * (len(account_number) - 4)
         return f"{masked_part}{account_number[-4:]}"
     raise ValueError("Номер счета должен содержать как минимум 4 цифры и состоять только из цифр.")
 
@@ -27,7 +27,7 @@ def mask_account_card(account_card):
     else:
         raise ValueError("Некорректный номер карты или счета.")
 
-    return ' '.join(parts[:-1] + [masked_part])
+    return " ".join(parts[:-1] + [masked_part])
 
 
 def get_date(date_string):
