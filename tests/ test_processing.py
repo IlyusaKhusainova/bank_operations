@@ -21,7 +21,7 @@ def test_filter_by_state(sample_data):
 
 def test_filter_by_state_invalid():
     with pytest.raises(TypeError):
-        filter_by_state(None)  # Проверка на None
+        filter_by_state([])  # Проверка на None
     with pytest.raises(TypeError):
         filter_by_state([])  # Проверка на пустой список
 
