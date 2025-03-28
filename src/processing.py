@@ -1,5 +1,5 @@
 from typing import List, Dict
-
+from datetime import datetime  # Импортируем datetime
 
 def filter_by_state(transactions: List[Dict], state: str = "EXECUTED") -> List[Dict]:
     """
@@ -18,15 +18,12 @@ def filter_by_state(transactions: List[Dict], state: str = "EXECUTED") -> List[D
     return [transaction for transaction in transactions if transaction.get("state") == state]
 
 
-def sort_by_date(transactions: List[Dict], descending: bool = True) -> List[Dict]:
-    """
-    Сортирует транзакции по дате.
+def sort_by_date(data, descending=True):
+    if not isinstance(data, list):
+        raise TypeError("Input must be a list")
 
-    :param transactions: Список словарей с транзакциями.
-    :param descending: Указывает, по убыванию ли сортировать.
-    :return: Отсортированный список транзакций.
-    """
-    if not isinstance(transactions, list):
-        raise TypeError("Входные данные должны быть списком транзакций.")
+    for item in data:
+        if not isinstance(item, dict) or 'date' not in item:
+            raise TypeError("Each item must be a dictionary with a 'date' key")
 
-    return sorted(transactions, key=lambda x: x["date"], reverse=descending)
+    return sorted(data, key=lambda x: datetime.fromisoformat(x['date']), reverse=descending)

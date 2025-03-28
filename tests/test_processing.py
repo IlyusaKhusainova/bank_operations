@@ -12,21 +12,26 @@ def sample_data():
 
 
 def test_filter_by_state(sample_data):
+    # Проверка фильтрации по умолчанию (EXECUTED)
     assert filter_by_state(sample_data) == [
         {"id": 1, "state": "EXECUTED", "date": "2021-06-01T02:26:18"},
         {"id": 3, "state": "EXECUTED", "date": "2021-06-02T02:26:18"},
     ]
+    # Проверка фильтрации по состоянию CANCELED
     assert filter_by_state(sample_data, "CANCELED") == [
         {"id": 2, "state": "CANCELED", "date": "2021-07-01T02:26:18"},
     ]
+    # Проверка фильтрации по несуществующему состоянию
     assert filter_by_state(sample_data, "NON_EXISTENT") == []
 
 
 def test_filter_by_state_invalid():
+    # Проверка на None
     with pytest.raises(TypeError):
-        filter_by_state(None)  # Проверка на None
+        filter_by_state(None)
+    # Проверка на некорректный тип
     with pytest.raises(TypeError):
-        filter_by_state("not a list")  # Проверка на некорректный тип
+        filter_by_state("not a list")
 
 
 @pytest.mark.parametrize(
@@ -79,5 +84,48 @@ def test_sort_by_date_empty():
 
 
 def test_sort_by_date_invalid_input():
+    # Проверка на None
     with pytest.raises(TypeError):
-        sort_by_date("not a list")  # Проверка на некорректный тип
+        sort_by_date(None)
+
+    # Проверка на некорректный тип (строка)
+    with pytest.raises(TypeError):
+        sort_by_date("not a list")
+
+    # Проверка на некорректный тип (число)
+    with pytest.raises(TypeError):
+        sort_by_date(123)
+
+    # Проверка на некорректный тип (словарь)
+    with pytest.raises(TypeError):
+        sort_by_date({"id": 1, "date": "2021-01-01T02:26:18"})
+
+
+def test_sort_by_date_mixed_formats():
+    data = [
+        {"id": 1, "date": "2021-06-02T02:26:18"},
+        {"id": 2, "date": "2021-05-01"},
+        {"id": 3, "date": "2021-06-01T02:26:18"},
+    ]
+    expected = [
+        {"id": 2, "date": "2021-05-01"},
+        {"id": 3, "date": "2021-06-01T02:26:18"},
+        {"id": 1, "date": "2021-06-02T02:26:18"},
+    ]
+    sorted_data = sort_by_date(data, descending=False)
+    assert sorted_data == expected
+
+
+def test_sort_by_date_same_date():
+    data = [
+        {"id": 1, "date": "2021-06-01T02:26:18"},
+        {"id": 2, "date": "2021-06-01T02:26:18"},
+        {"id": 3, "date": "2021-06-01T02:26:18"},
+    ]
+    expected = [
+        {"id": 1, "date": "2021-06-01T02:26:18"},
+        {"id": 2, "date": "2021-06-01T02:26:18"},
+        {"id": 3, "date": "2021-06-01T02:26:18"},
+    ]
+    sorted_data = sort_by_date(data, descending=False)
+    assert sorted_data == expected
