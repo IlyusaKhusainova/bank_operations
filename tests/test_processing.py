@@ -45,3 +45,39 @@ def test_filter_by_state_invalid():
 def test_sort_by_date(data, expected):
     sorted_data = sort_by_date(data, descending=False)  # Сортируем по возрастанию
     assert sorted_data == expected, f"Ожидалось {expected}, но получено {sorted_data} для входных данных {data}"
+
+
+@pytest.fixture
+def transaction_data():
+    return [
+        {"id": 1, "date": "2023-10-01T02:26:18"},
+        {"id": 2, "date": "2023-09-15T02:26:18"},
+        {"id": 3, "date": "2023-10-05T02:26:18"},
+        {"id": 4, "date": "2023-08-20T02:26:18"},
+    ]
+
+
+def test_sort_by_date_descending(transaction_data):
+    sorted_transactions = sort_by_date(transaction_data)
+    assert sorted_transactions[0]["id"] == 3  # Latest date
+    assert sorted_transactions[1]["id"] == 1
+    assert sorted_transactions[2]["id"] == 2
+    assert sorted_transactions[3]["id"] == 4  # Oldest date
+
+
+def test_sort_by_date_ascending(transaction_data):
+    sorted_transactions = sort_by_date(transaction_data, descending=False)
+    assert sorted_transactions[0]["id"] == 4  # Oldest date
+    assert sorted_transactions[1]["id"] == 2
+    assert sorted_transactions[2]["id"] == 1
+    assert sorted_transactions[3]["id"] == 3  # Latest date
+
+
+def test_sort_by_date_empty():
+    sorted_transactions = sort_by_date([])
+    assert sorted_transactions == []
+
+
+def test_sort_by_date_invalid_input():
+    with pytest.raises(TypeError):
+        sort_by_date("not a list")  # Проверка на некорректный тип
