@@ -96,5 +96,20 @@ state.
 Проверка корректности сортировки при одинаковых датах.
 Тесты на работу функции с некорректными или нестандартными форматами дат.
 
+# Модуль генераторов
 
+## Функции
+
+### `filter_by_currency(transactions, currency_code)`
+
+Фильтрует транзакции по заданной валюте.
+
+**Пример использования:**
+
+```python
+usd_transactions = filter_by_currency(transactions, "USD")
+for transaction in usd_transactions:
+    print(transaction)
+    
+    -transaction_descriptions(transactions) - Генерирует описания транзакций.
 
