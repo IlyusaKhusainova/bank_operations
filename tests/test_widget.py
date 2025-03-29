@@ -12,8 +12,8 @@ from src.widget import mask_account_card, get_date
         ("Дебетовая карта 4000123456789010", "Дебетовая карта 4000 12** **** 9010"),  # Пример с номером Visa
     ],
 )
-def test_mask_account_card(info, expected):
-    """Тестирование функции маскировки номера карты или счета."""
+def test_mask_account_card(info: str, expected: str) -> None:
+    """ Тестирование функции маскировки номера карты или счета. """
     result = mask_account_card(info)
     assert result == expected, f"Expected '{expected}', but got '{result}' for input '{info}'"
 
@@ -27,8 +27,8 @@ def test_mask_account_card(info, expected):
         "Некорректный ввод 123",  # Некорректный номер
     ],
 )
-def test_mask_account_card_invalid(info):
-    """Тестирование обработки некорректного ввода в функции маскировки."""
+def test_mask_account_card_invalid(info: str) -> None:
+    """ Тестирование обработки некорректного ввода в функции маскировки. """
     with pytest.raises(ValueError) as excinfo:
         mask_account_card(info)
     assert "Некорректный ввод" in str(excinfo.value)
@@ -43,8 +43,8 @@ def test_mask_account_card_invalid(info):
         ("2024-01-01T00:00:00.000000", "01.01.2024"),  # Первый день нового года
     ],
 )
-def test_get_date(date_str, expected):
-    """Тестирование функции преобразования даты из ISO формата."""
+def test_get_date(date_str: str, expected: str) -> None:
+    """ Тестирование функции преобразования даты из ISO формата. """
     result = get_date(date_str)
     assert result == expected, f"Expected '{expected}', but got '{result}' for input '{date_str}'"
 
@@ -57,7 +57,7 @@ def test_get_date(date_str, expected):
         "",  # Пустая строка
     ],
 )
-def test_get_date_invalid(date_str):
-    """Тестирование обработки некорректного формата даты."""
+def test_get_date_invalid(date_str: str) -> None:
+    """ Тестирование обработки некорректного формата даты. """
     with pytest.raises(ValueError, match="Некорректный формат даты"):
         get_date(date_str)

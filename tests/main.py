@@ -1,20 +1,23 @@
-def get_mask_card_number(card_number):
-    """Маскирует все, кроме первых 4 и последних 4 цифр номера карты."""
+from datetime import datetime
+
+
+def get_mask_card_number(card_number: str) -> str:
+    """ Маскирует все, кроме первых 4 и последних 4 цифр номера карты. """
     if len(card_number) == 16 and card_number.isdigit():
         return f"{card_number[:4]} ** **** {card_number[-4:]}"
     raise ValueError("Номер карты должен содержать 16 цифр и состоять только из цифр.")
 
 
-def get_mask_account(account_number):
-    """Маскирует все, кроме последних 4 цифр номера счета."""
+def get_mask_account(account_number: str) -> str:
+    """ Маскирует все, кроме последних 4 цифр номера счета. """
     if account_number.isdigit() and len(account_number) >= 4:
         masked_part = "*" * (len(account_number) - 4)
         return f"{masked_part}{account_number[-4:]}"
     raise ValueError("Номер счета должен содержать как минимум 4 цифры и состоять только из цифр.")
 
 
-def mask_account_card(account_card):
-    """Разделяет строку с номером карты и маскирует номер карты или номер счета соответственно."""
+def mask_account_card(account_card: str) -> str:
+    """ Разделяет строку с номером карты и маскирует номер карты или номер счета соответственно. """
     parts = account_card.split()
     if len(parts) < 2:
         raise ValueError("Необходимо указать имя и номер карты или счета.")
@@ -30,10 +33,8 @@ def mask_account_card(account_card):
     return " ".join(parts[:-1] + [masked_part])
 
 
-def get_date(date_string):
-    """Преобразует строку даты в желаемый формат."""
-    from datetime import datetime
-
+def get_date(date_string: str) -> str:
+    """ Преобразует строку даты в желаемый формат. """
     try:
         # Предполагается, что входная строка будет в формате YYYY-MM-DD
         dt = datetime.strptime(date_string, "%Y-%m-%d")

@@ -1,4 +1,9 @@
-def filter_by_currency(transactions, currency_code):
+from typing import List, Dict, Any, Generator
+
+
+def filter_by_currency(
+    transactions: List[Dict[str, Any]], currency_code: str
+) -> Generator[Dict[str, Any], None, None]:
     """
     Фильтрует транзакции по заданной валюте.
 
@@ -11,7 +16,9 @@ def filter_by_currency(transactions, currency_code):
             yield transaction
 
 
-def transaction_descriptions(transactions):
+def transaction_descriptions(
+    transactions: List[Dict[str, Any]]
+) -> Generator[str, None, None]:
     """
     Генерирует описания транзакций.
 
@@ -22,7 +29,7 @@ def transaction_descriptions(transactions):
         yield transaction['description']
 
 
-def card_number_generator(start, stop):
+def card_number_generator(start: int, stop: int) -> Generator[str, None, None]:
     """
     Генерирует номера банковских карт в формате XXXX XXXX XXXX XXXX.
 
@@ -31,4 +38,8 @@ def card_number_generator(start, stop):
     :return: Генератор, который возвращает номера карт.
     """
     for number in range(start, stop + 1):
-        yield f"{number:016d}"[:4] + " " + f"{number:016d}"[4:8] + " " + f"{number:016d}"[8:12] + " " + f"{number:016d}"[12:16]
+        formatted_number = f"{number:016d}"
+        yield (
+            f"{formatted_number[:4]} {formatted_number[4:8]} "
+            f"{formatted_number[8:12]} {formatted_number[12:16]}"
+        )

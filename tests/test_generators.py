@@ -1,8 +1,10 @@
 import pytest
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
+from typing import List, Dict, Any
+
 
 @pytest.fixture
-def transactions():
+def transactions() -> List[Dict[str, Any]]:
     return [
         {
             "id": 939719570,
@@ -51,15 +53,30 @@ def transactions():
         }
     ]
 
-def test_filter_by_currency(transactions):
+
+def test_filter_by_currency(transactions: List[Dict[str, Any]]) -> None:
+    # Тестирование фильтрации по USD
     usd_transactions = list(filter_by_currency(transactions, "USD"))
     assert len(usd_transactions) == 2
     assert all(tx['operationAmount']['currency']['code'] == "USD" for tx in usd_transactions)
 
+    # Тестирование фильтрации по RUB
     rub_transactions = list(filter_by_currency(transactions, "RUB"))
-    assert len(rub_transactions) == 0
+    assert len(rub_transactions) == 1
+    assert all(tx['operationAmount']['currency']['code'] == "RUB" for tx in rub_transactions)
 
-def test_transaction_descriptions(transactions):
+    # Тестирование фильтрации по несуществующей валюте
+    nonexistent_transactions = list(filter_by_currency(transactions, "EUR"))
+    assert len(nonexistent_transactions) == 0
+
+    # Тестирование фильтрации на пустом списке
+    empty_transactions: List[Dict[str, Any]] = []
+    empty_result = list(filter_by_currency(empty_transactions, "USD"))
+    assert len(empty_result) == 0
+
+
+def test_transaction_descriptions(transactions: List[Dict[str, Any]]) -> None:
+    # Проверка, что функция возвращает корректные описания
     descriptions = list(transaction_descriptions(transactions))
     assert descriptions == [
         "Перевод организации",
@@ -67,8 +84,14 @@ def test_transaction_descriptions(transactions):
         "Перевод со счета на счет"
     ]
 
-def test_card_number_generator():
-    generated_numbers = list(card_number_generator(1, 5))
+    # Проверка на пустом списке
+    empty_descriptions = list(transaction_descriptions([]))
+    assert empty_descriptions == []
+
+
+def test_card_number_generator() -> None:
+    # Проверка генерации номеров карт в заданном диапазоне
+    generated_numbers: List[str] = list(card_number_generator(1, 5))
     assert generated_numbers == [
         "0000 0000 0000 0001",
         "0000 0000 0000 0002",
@@ -76,3 +99,15 @@ def test_card_number_generator():
         "0000 0000 0000 0004",
         "0000 0000 0000 0005"
     ]
+
+    # Проверка генерации с одним номером
+    single_number: List[str] = list(card_number_generator(1, 1))
+    assert single_number == ["0000 0000 0000 0001"]
+
+    # Проверка генерации с диапазоном, где start > stop
+    reverse_range: List[str] = list(card_number_generator(5, 1))
+    assert reverse_range == []
+
+    # Проверка генерации с нулевым диапазоном
+    zero_range: List[str] = list(card_number_generator(0, 0))
+    assert zero_range == ["0000 0000 0000 0000"]

@@ -1,9 +1,10 @@
 import pytest
 from src.processing import filter_by_state, sort_by_date
+from typing import List, Dict, Any
 
 
 @pytest.fixture
-def sample_data():
+def sample_data() -> List[Dict[str, Any]]:
     return [
         {"id": 1, "state": "EXECUTED", "date": "2021-06-01T02:26:18"},
         {"id": 2, "state": "CANCELED", "date": "2021-07-01T02:26:18"},
@@ -11,7 +12,7 @@ def sample_data():
     ]
 
 
-def test_filter_by_state(sample_data):
+def test_filter_by_state(sample_data: List[Dict[str, Any]]) -> None:
     # Проверка фильтрации по умолчанию (EXECUTED)
     assert filter_by_state(sample_data) == [
         {"id": 1, "state": "EXECUTED", "date": "2021-06-01T02:26:18"},
@@ -25,17 +26,18 @@ def test_filter_by_state(sample_data):
     assert filter_by_state(sample_data, "NON_EXISTENT") == []
 
 
-def test_filter_by_state_invalid():
+def test_filter_by_state_invalid() -> None:
     # Проверка на None
     with pytest.raises(TypeError):
-        filter_by_state(None)
+        filter_by_state(None)  # Здесь передается None, что вызывает ошибку
+
     # Проверка на некорректный тип
     with pytest.raises(TypeError):
-        filter_by_state("not a list")
+        filter_by_state("not a list")  # Здесь передается строка, что вызывает ошибку
 
 
 @pytest.mark.parametrize(
-    "data,expected",
+    "data, expected",
     [
         (
             [{"id": 1, "date": "2021-06-02T02:26:18"}, {"id": 2, "date": "2021-05-01T02:26:18"}],
@@ -47,13 +49,13 @@ def test_filter_by_state_invalid():
         ),
     ],
 )
-def test_sort_by_date(data, expected):
+def test_sort_by_date(data: List[Dict[str, Any]], expected: List[Dict[str, Any]]) -> None:
     sorted_data = sort_by_date(data, descending=False)  # Сортируем по возрастанию
     assert sorted_data == expected, f"Ожидалось {expected}, но получено {sorted_data} для входных данных {data}"
 
 
 @pytest.fixture
-def transaction_data():
+def transaction_data() -> List[Dict[str, Any]]:
     return [
         {"id": 1, "date": "2023-10-01T02:26:18"},
         {"id": 2, "date": "2023-09-15T02:26:18"},
@@ -62,7 +64,7 @@ def transaction_data():
     ]
 
 
-def test_sort_by_date_descending(transaction_data):
+def test_sort_by_date_descending(transaction_data: List[Dict[str, Any]]) -> None:
     sorted_transactions = sort_by_date(transaction_data)
     assert sorted_transactions[0]["id"] == 3  # Latest date
     assert sorted_transactions[1]["id"] == 1
@@ -70,7 +72,7 @@ def test_sort_by_date_descending(transaction_data):
     assert sorted_transactions[3]["id"] == 4  # Oldest date
 
 
-def test_sort_by_date_ascending(transaction_data):
+def test_sort_by_date_ascending(transaction_data: List[Dict[str, Any]]) -> None:
     sorted_transactions = sort_by_date(transaction_data, descending=False)
     assert sorted_transactions[0]["id"] == 4  # Oldest date
     assert sorted_transactions[1]["id"] == 2
@@ -78,15 +80,15 @@ def test_sort_by_date_ascending(transaction_data):
     assert sorted_transactions[3]["id"] == 3  # Latest date
 
 
-def test_sort_by_date_empty():
+def test_sort_by_date_empty() -> None:
     sorted_transactions = sort_by_date([])
     assert sorted_transactions == []
 
 
-def test_sort_by_date_invalid_input():
+def test_sort_by_date_invalid_input() -> None:
     # Проверка на None
     with pytest.raises(TypeError):
-        sort_by_date(None)
+        sort_by_date(None)  # Здесь передается None, что вызывает ошибку
 
     # Проверка на некорректный тип (строка)
     with pytest.raises(TypeError):
@@ -101,7 +103,7 @@ def test_sort_by_date_invalid_input():
         sort_by_date({"id": 1, "date": "2021-01-01T02:26:18"})
 
 
-def test_sort_by_date_mixed_formats():
+def test_sort_by_date_mixed_formats() -> None:
     data = [
         {"id": 1, "date": "2021-06-02T02:26:18"},
         {"id": 2, "date": "2021-05-01"},
@@ -116,7 +118,7 @@ def test_sort_by_date_mixed_formats():
     assert sorted_data == expected
 
 
-def test_sort_by_date_same_date():
+def test_sort_by_date_same_date() -> None:
     data = [
         {"id": 1, "date": "2021-06-01T02:26:18"},
         {"id": 2, "date": "2021-06-01T02:26:18"},
