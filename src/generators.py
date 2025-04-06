@@ -1,45 +1,28 @@
 from typing import List, Dict, Any, Generator
 
 
-def filter_by_currency(
-    transactions: List[Dict[str, Any]], currency_code: str
-) -> Generator[Dict[str, Any], None, None]:
-    """
-    Фильтрует транзакции по заданной валюте.
+def filter_by_currency(transactions: List[Dict[str, Any]], currency_code: str) -> List[Dict[str, Any]]:
+    """Фильтрует транзакции по заданной валюте."""
+    return [
+        transaction for transaction in transactions
+        if transaction.get('operationAmount', {}).get('currency', {}).get('code') == currency_code
+    ]
 
-    :param transactions: Список словарей с транзакциями.
-    :param currency_code: Код валюты для фильтрации.
-    :return: Итератор, который возвращает транзакции с заданной валютой.
-    """
+
+def transaction_descriptions(transactions: List[Dict[str, Any]]) -> Generator[str, None, None]:
+    """Генерирует описания транзакций."""
     for transaction in transactions:
-        if transaction['operationAmount']['currency']['code'] == currency_code:
-            yield transaction
+        description = transaction.get('description')
+        if description is None:
+            yield 'Описание отсутствует'
+        else:
+            yield description
 
 
-def transaction_descriptions(
-    transactions: List[Dict[str, Any]]
-) -> Generator[str, None, None]:
-    """
-    Генерирует описания транзакций.
-
-    :param transactions: Список словарей с транзакциями.
-    :return: Генератор, который возвращает описания транзакций.
-    """
+def card_number_generator(transactions: List[Dict[str, Any]]) -> Generator[str, None, None]:
+    """Генерирует номера карт из транзакций."""
     for transaction in transactions:
-        yield transaction['description']
-
-
-def card_number_generator(start: int, stop: int) -> Generator[str, None, None]:
-    """
-    Генерирует номера банковских карт в формате XXXX XXXX XXXX XXXX.
-
-    :param start: Начальное значение для генерации.
-    :param stop: Конечное значение для генерации.
-    :return: Генератор, который возвращает номера карт.
-    """
-    for number in range(start, stop + 1):
-        formatted_number = f"{number:016d}"
-        yield (
-            f"{formatted_number[:4]} {formatted_number[4:8]} "
-            f"{formatted_number[8:12]} {formatted_number[12:16]}"
-        )
+        from_field = transaction.get('from', '')
+        if from_field:  # Проверяем, что поле 'from' не пустое
+            card_number = from_field.split()[-1]  # Получаем последнюю часть
+            yield f'**** **** **** {card_number[-4:]}'  # Маскируем все, кроме последних 4 цифр
