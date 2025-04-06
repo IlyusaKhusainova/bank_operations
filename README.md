@@ -52,7 +52,7 @@ python
 ### Используемые библиотеки
     -pytest - для написания и запуска тестов.
     -pytest-cov - для измерения покрытия тестами.
-Покрытие тестами составляет 99%.
+Покрытие тестами составляет 97%.
 Количество проводимых тестов - 30.
 
 ### Линтеры и форматирование
@@ -96,20 +96,48 @@ state.
 Проверка корректности сортировки при одинаковых датах.
 Тесты на работу функции с некорректными или нестандартными форматами дат.
 
-# Модуль генераторов
 
-## Функции
+# Модуль generators
 
-### `filter_by_currency(transactions, currency_code)`
+В проекте также реализован модуль generators, который включает следующие функции:
 
-Фильтрует транзакции по заданной валюте.
+## Функция filter_by_currency
 
-**Пример использования:**
+Функция filter_by_currency принимает список словарей на вход и возвращает итератор, фильтруя транзакции по заданной валюте.
 
-```python
-usd_transactions = filter_by_currency(transactions, "USD")
-for transaction in usd_transactions:
-    print(transaction)
-    
-    -transaction_descriptions(transactions) - Генерирует описания транзакций.
+Пример использования:
 
+    from src.generators import filter_by_currency
+
+    transactions = [
+    {'id': 1, 'amount': 100, 'currency': 'USD'},
+    {'id': 2, 'amount': 200, 'currency': 'EUR'},
+    ]
+    usd_transactions = list(filter_by_currency(transactions, 'USD'))
+    print(usd_transactions)  # [{'id': 1, 'amount': 100, 'currency': 'USD'}]
+
+## Функция-генератор transaction_descriptions
+
+Функция-генератор transaction_descriptions принимает на вход список словарей и использует yield для генерации значений по запросу.
+
+Пример использования:
+
+    from src.generators import transaction_descriptions
+
+    transactions = [
+    {'id': 1, 'description': 'Перевод'},
+    {'id': 2, 'description': None},
+    ]
+    descriptions = list(transaction_descriptions(transactions))
+    print(descriptions)  # ['Перевод', 'Описание отсутствует']
+
+## Генератор card_number_generator
+
+Генератор card_number_generator принимает значения start и stop в качестве аргумента и генерирует номера карт.
+
+Пример использования:
+
+    from src.generators import card_number_generator
+
+    for card_number in card_number_generator(1000, 1005):
+    print(card_number)  # Генерирует номера карт от 1000 до 1005
